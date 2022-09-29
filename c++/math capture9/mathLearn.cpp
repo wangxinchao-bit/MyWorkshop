@@ -21,7 +21,6 @@ int xGCD (int a ,int b ,int & x,int &y){
         return a;
     }
 
-
     int x1,y1, gcb = xGCD(b,a%b,x1,y1);
     x = y1 ,y = x1 -(a/b)*y1;
      return gcb;
@@ -115,14 +114,50 @@ string addString(string num1,string num2){
  * 在这里我们采用经典的Fisher-Yales洗牌算法
  */
 
+// 两个二进制字符串求和
+string addBinary(string a,string b){
+    int len1 = a.length(),len2 = b.length();
+    // 确定len1 是长的
+    if(len1<len2){
+        swap(a,b);
+        swap(len1,len2);
+    }
+    if(len2==0) return a;
+    reverse(b.begin(),b.end());
+    reverse(a.begin(),a.end());
+    string oput("");
+    int tags = 0;
+    for(int i =0;i<len2;i++){
+        int cur_res = (b[i] -'0'+a[i]-'0')+tags;
+        oput+= to_string(cur_res%2);
+        tags = cur_res>=2?1:0;
+    }
+    for(int i = len2;i<len1;i++){
+        int cur_res = (a[i]-'0')+tags;
+        oput+= to_string(cur_res%2);
+        tags = cur_res>=2?1:0;
+    }
+    if(tags==1) oput+='1';
+
+    reverse(oput.begin(),oput.end());
+    return oput;
+
+}
+
 class Solution{
     vector <int> origin;
     public :
+
+    //调用移动构造函数，掏空str，掏空后，最好不要使用str
+    // v.push_back(std::move(str));
+
     Solution(vector<int> nums):origin(move(nums)){}
     vector<int> reset(){
         return origin;
     }
 
+    // Fisher-Yates 洗牌算法：从数组 i = 0的位置开始，将当前位置的元素与数组中的元素随机交换，
+    // 这样同样能保证数组元素是随机分布的，而且这样还可以节省一个List的空间
     vector<int> shuffle(){
         if(origin.empty()) return {};
         vector<int> shuffled(origin);
@@ -145,10 +180,44 @@ class Solution{
  * 我们提供一个简单的对于水库算法随机性的证明。
  * 
 */
-class Solution{
-    ListNode *
 
-};
+// 判断一个数是否是3的次方
+
+/**
+ * 1、直接使用对数的方式进行判断一个数是不是其3的倍数
+ * 2、直接使用最大的数处以这个数使得其余数为0 ，那么就是这个数指数幂 
+ * */
+ 
+bool isPowerThree(int n){
+    return fmod(log10(n)/log10(3),1)==0;
+}
+
+bool isPowerOfThree(int n) {
+return n > 0 && 1162261467 % n == 0;
+}
+
+
+// 将EXCEL中的列名和数字进行转换
+string convertToTitle(int columnNumber) {
+    string ans;
+    while(columnNumber) {
+        // 在进行进制转换过程中，需要将数据进行整体向左偏移
+        // 所以在进行计算的过程中需要先--操作
+
+        --columnNumber;
+        int re = columnNumber % 26;
+        ans.push_back('A' + re);
+        columnNumber /= 26;
+    }
+    reverse(ans.begin(), ans.end());
+    return ans;
+}
+
+// 除去自身以外数组的乘积
+vector<int> productExceptSelft(vector <int>&nums){
+
+
+}
 
 int main(void ){
 
@@ -169,6 +238,11 @@ int main(void ){
 
     cout<<"string nums add and the result is  "<<addString("2324","454543");
 
+    cout<<"num 227 is or not the 3' power: "<<isPowerOfThree(227)<<endl;
+
+    cout<<"num 227 is or not the 3' power: "<<isPowerOfThree(27)<<endl;
+
+    cout<<"1010 && 1011 the sum is = "<<addBinary("1010","1011")<<endl;
     system ("pause");
     return 0;
 }
